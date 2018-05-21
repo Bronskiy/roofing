@@ -1,0 +1,3 @@
+{!! NoCaptcha::renderJs() !!}
+</body>
+</html>
