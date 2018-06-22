@@ -2,9 +2,6 @@
 
 @section('content')
 
-
-
-
 <div class="portlet box green">
   <div class="portlet-title">
     <div class="caption">{{ trans('quickadmin::templates.templates-view_index-list') }}</div>

@@ -8,7 +8,6 @@
 <script src="{{ url('quickadmin/ckeditor') }}/adapters/jquery.js"></script>
 <script>
   var options = {
-    language: 'ru',
     filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
     filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{csrf_token()}}',
     filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
@@ -18,7 +17,6 @@
 </script>
 <script src="{{ url('quickadmin/js') }}/bootstrap.min.js"></script>
 <script src="{{ url('quickadmin/js') }}/main.js"></script>
-<script src="{{ url('quickadmin/js') }}/datepicker-ru.js"></script>
 
 <script>
 

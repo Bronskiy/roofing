@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Webklex\IMAP\Client;
 use Webklex\IMAP\Facades\Message;
 use App\Accounts;
+use App\DocumentHeaders;
+use PDF;
 
 class MailReceiverController extends Controller
 {
@@ -94,6 +96,7 @@ class MailReceiverController extends Controller
     $date_pattern = "/\d{1,2}\/\d{1,2}\/\d{2,4}/";
     $phone_pattern = '/[0-9]{3}[\-][0-9]{7}|[0-9]{3}[\s][0-9]{7}|[0-9]{3}[\s][0-9]{3}[\s][0-9]{4}|[0-9]{10}|[0-9]{3}[\-][0-9]{3}[\-][0-9]{4}/';
     $name_pattern = "/^([a-zA-Z\s ]*)/";
+    $notes_pattern = "/((0?[1-9]|1[012])([:.][0-5][0-9])?(\s?[ap]m)|([01]?[0-9]|2[0-3])([:.][0-5][0-9]))[^\]].*/";
     $time_pattern = "/((0?[1-9]|1[012])([:.][0-5][0-9])?(\s?[ap]m)|([01]?[0-9]|2[0-3])([:.][0-5][0-9]))/";
     $zipcode_pattern = "/\s[0-9]{5}\s/";
     $address_pattern = "/(?<=>)[a-z\s]*(?=<\/a>)/";
@@ -139,6 +142,7 @@ class MailReceiverController extends Controller
       */
 
       $phones = array();
+      $notes = array();
       $dates = array();
       $name = array();
       $time = array();
@@ -149,6 +153,7 @@ class MailReceiverController extends Controller
       preg_match_all($phone_pattern, $value, $phones);
       preg_match_all($date_pattern, $value, $dates);
       preg_match_all($name_pattern, $value, $name);
+      preg_match_all($notes_pattern, $value, $notes);
       preg_match_all($time_pattern, $value, $time);
       preg_match_all($zipcode_pattern, $value, $zipcode);
       preg_match_all($age_pattern, $value, $age);
@@ -165,6 +170,7 @@ class MailReceiverController extends Controller
       //  $address = $address[0];
       $name = $name[0];
       $phones = $phones[0];
+      $notes = (!empty($notes[0])) ? $notes[0] : '---' ;
       /*
       echo '<p>Zipcode: '.$zipcode[0].'</p>';
       echo '<p>Time: '.$time[0].'</p>';
@@ -175,6 +181,7 @@ class MailReceiverController extends Controller
       echo '<p>Type: '.$type[0].'</p>';
       */
       $table_row[] = array(
+        'Lead' => $value,
         'Zipcode' => $zipcode[0],
         'Age' => $age[0],
         'Time' => $time[0],
@@ -182,7 +189,8 @@ class MailReceiverController extends Controller
         'Date' => $dates[0],
         'Type' => $type,
         'Address' => $this->str_to_address($value),
-        'Phones' => $phones
+        'Phones' => $phones,
+        'Notes' => $notes[0]
       );
       /*
       $table_row['Phones'] =$zipcode[0];
@@ -200,8 +208,10 @@ class MailReceiverController extends Controller
 
   public function getEmailExport(Request $request)
   {
+    $documentheaders = DocumentHeaders::all();
+
     $i = 0;
-    while ($i >= 0 && $i < 10) {
+    while ($i >= 0 && $i < 100) {
       $i++;
       $fchkBx = 'chckBx_'.$i;
       $fDate = 'date_'.$i;
@@ -221,6 +231,52 @@ class MailReceiverController extends Controller
       };
 
     }
-    return view('admin.mailbox.export', compact('data'));
+    return view('admin.mailbox.export', compact('data', 'documentheaders'));
   }
+  public function getEmailFileExport(Request $request)
+  {
+    $headerFooter = DocumentHeaders::where('id', $request->headerFooter)->first();
+
+    $i = 0;
+    while ($i >= 0 && $i < 300) {
+      $i++;
+      $fLoop = 'loop_'.$i;
+      $fchckFileBx = 'chckFileBx_'.$i;
+      $fName = 'name_'.$i;
+      $fPhones = 'phones_'.$i;
+      $fTime = 'time_'.$i;
+      $fAge = 'age_'.$i;
+      $fType = 'type_'.$i;
+      $fAddress = 'address_'.$i;
+      $fNotes = 'notes_'.$i;
+  /*    if ($request->$fLoop == '') {
+        break;
+      };
+      */
+      if ($request->$fchckFileBx === 'exportToFile') {
+        $data[] = array(
+          'checked' => $request->$fchckFileBx,
+          'name' => $request->$fName,
+          'phones' => $request->$fPhones,
+          'time' => date('g:i a', strtotime($request->$fTime)),
+          'age' => $request->$fAge,
+          'type' => $request->$fType,
+          'address' => $request->$fAddress,
+          'notes' => $request->$fNotes,
+        );
+        usort($data, function($a, $b) {
+            return $a['time'] <=> $b['time'];
+        });
+      };
+
+    }
+    $pdf = PDF::loadView('admin.mailbox.download', compact('data', 'headerFooter'));
+    return $pdf->stream('admin.mailbox.download');
+  //  return view('admin.mailbox.download', compact('data'));
+  }
+  public function getEmailXLSExport(Request $request)
+  {
+    return view('pages.home');
+  }
+
 }

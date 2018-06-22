@@ -15,10 +15,12 @@ $(document).ready(function () {
             {'bSortable': false, 'aTargets': [0]}
         ]
     });
-
+    /*
     $('.ckeditor').each(function () {
         CKEDITOR.replace($(this));
     })
+    */
+
 
     $('.mass').click(function () {
         if ($(this).is(":checked")) {

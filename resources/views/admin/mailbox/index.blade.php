@@ -6,19 +6,19 @@
 
 
 <div class="form-group">
-    {!! Form::label('account_select', 'Account', array('class'=>'col-sm-2 control-label')) !!}
-    <div class="col-sm-10">
-        {!! Form::select('account_select', $accounts, old('account_select'), array('class'=>'form-control')) !!}
+  {!! Form::label('account_select', 'Account', array('class'=>'col-sm-2 control-label')) !!}
+  <div class="col-sm-10">
+    {!! Form::select('account_select', $accounts, old('account_select'), array('class'=>'form-control')) !!}
 
-    </div>
+  </div>
 </div>
 
 <div class="form-group">
-    {!! Form::label('cat_date', 'Date', array('class'=>'col-sm-2 control-label')) !!}
-    <div class="col-sm-10">
-        {!! Form::text('cat_date', old('cat_date'), array('class'=>'form-control datepicker')) !!}
+  {!! Form::label('cat_date', 'Date', array('class'=>'col-sm-2 control-label')) !!}
+  <div class="col-sm-10">
+    {!! Form::text('cat_date', old('cat_date'), array('class'=>'form-control datepicker', 'autocomplete' => "off")) !!}
 
-    </div>
+  </div>
 </div>
 
 <div class="form-group">
