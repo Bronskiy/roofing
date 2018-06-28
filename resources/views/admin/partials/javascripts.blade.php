@@ -32,6 +32,7 @@ $('.datetimepicker').datetimepicker({
 });
 
 $('#datatable').dataTable( {
+  "autoWidth": false,
   "language": {
     "url": "{{ trans('quickadmin::strings.datatable_url_language') }}"
   }

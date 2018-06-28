@@ -59,7 +59,7 @@
             <div class="">
               <p class="lead-text">Open original text <i class="fa fa-chevron-down" aria-hidden="true"></i></p>
               <pre class="lead-pre">
-                {{ $row['Lead'] }}
+                {{ preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "<!--1-->", $row['Lead']) }}
               </pre>
             </div>
           </td>

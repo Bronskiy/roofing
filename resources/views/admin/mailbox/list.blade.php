@@ -1,12 +1,17 @@
 @extends('admin.layouts.master')
 
 @section('content')
-
+@if (! isset($data))
+<h2>No emails</h2>
+<p>Choose different date range</p>
+<h4><a href="/admin/mailbox"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Mailbox</a></h4>
+@else
 <div class="portlet box green">
   <div class="portlet-title">
     <div class="caption">{{ trans('quickadmin::templates.templates-view_index-list') }}</div>
   </div>
   <div class="portlet-body">
+
     {!! Form::open(['route' => 'mailbox.export', 'method' => 'post', 'id' => 'form-with-validation', 'class' => 'form-horizontal']) !!}
 
     <table class="table table-striped table-hover table-responsive " id="">
@@ -37,6 +42,7 @@
 
       </tbody>
     </table>
+
     <div class="form-group">
       <div class="col-sm-10">
         {!! Form::submit( 'Export' , array('class' => 'btn btn-primary')) !!}
@@ -45,6 +51,7 @@
     {!! Form::close() !!}
   </div>
 </div>
+@endif
 
 
 @endsection
