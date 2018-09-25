@@ -18,6 +18,7 @@
                         <th>
                             {!! Form::checkbox('delete_all',1,false,['class' => 'mass']) !!}
                         </th>
+                        <th>#</th>
                         <th>Sender</th>
 <th>Date</th>
 <th>Subject</th>
@@ -33,6 +34,7 @@
                             <td>
                                 {!! Form::checkbox('del-'.$row->id,1,false,['class' => 'single','data-id'=> $row->id]) !!}
                             </td>
+                            <td>{{ $row->id }}</td>
                             <td>{{ $row->inbox_sender }}</td>
 <td>{{ $row->inbox_date }}</td>
 <td>{{ $row->inbox_subject }}</td>

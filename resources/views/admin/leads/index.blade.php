@@ -15,14 +15,15 @@
           <th>
             {!! Form::checkbox('delete_all',1,false,['class' => 'mass']) !!}
           </th>
-          <th style="width:8%;">Name</th>
-          <th style="width:8%;">Phone(s)</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Phone(s)</th>
           <th>Time</th>
           <th>Roof Age</th>
           <th>Roof Type</th>
           <th>Address</th>
           <th>Source Email Date</th>
-          <th>Export</th>
+          <th>Exp</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -33,12 +34,25 @@
           <td>
             {!! Form::checkbox('del-'.$row->id,1,false,['class' => 'single','data-id'=> $row->id]) !!}
           </td>
-          <td>{{ $row->lead_name }}</td>
-          <td>{{ $row->lead_phones }}</td>
+          <td>{{ $row->id }}</td>
+          <td>
+            <div class="percent100">
+            {{ $row->lead_name }}
+          </div>
+          </td>
+          <td>
+            <div class="percent100">
+            {{ $row->lead_phones }}
+          </div>
+        </td>
           <td>{{ $row->lead_time }}</td>
           <td>{{ $row->lead_roof_age }}</td>
           <td>{{ $row->lead_foor_type }}</td>
-          <td>{{ $row->lead_address }}</td>
+          <td>
+            <div class="percent100">
+            {{ $row->lead_address }}
+          </div>
+          </td>
           <td>
             @if(isset($row->inbox->inbox_date))
             <a href="/admin/inbox/{{ $row->inbox->id }}/edit">{{ $row->inbox->inbox_date }}</a>
@@ -122,7 +136,7 @@ $(document).ready(function () {
     }
   });
   $('#download-pdf, #download-xls').click(function () {
-    
+
     if($(this).attr("id") == "download-pdf"){
       alert('PDF');
       $("#massExport").attr('action', '/admin/mailbox/file-export');

@@ -24,6 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+      $schedule->call('App\Http\Controllers\MailReceiverController@fetchEmails')
+                ->daily();
         // $schedule->command('inspire')
         //          ->hourly();
     }

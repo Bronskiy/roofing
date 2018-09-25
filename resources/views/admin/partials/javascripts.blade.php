@@ -31,13 +31,14 @@ $('.datetimepicker').datetimepicker({
   timeFormat: "{{ config('quickadmin.time_format_jquery') }}"
 });
 
+
 $('#datatable').dataTable( {
-  "autoWidth": false,
   "language": {
     "url": "{{ trans('quickadmin::strings.datatable_url_language') }}"
-  }
+  },
+  "iDisplayLength": 50,
+  "aaSorting": [[ 1, "desc" ]]
 });
-
 function makeSlug(str)
 {
   var from="а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я ā ą ä á à â å č ć ē ę ě é è ê æ ģ ğ ö ó ø ǿ ô ő ḿ ŉ ń ṕ ŕ ş ü ß ř ł đ þ ĥ ḧ ī ï í î ĵ ķ ł ņ ń ň ř š ś ť ů ú û ứ ù ü ű ū ý ÿ ž ź ż ç є ґ".split(' ');

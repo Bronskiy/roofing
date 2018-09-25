@@ -76,7 +76,13 @@ class MailReceiverController extends Controller
 
       $aFolder = $oClient->getFolders();
       foreach($aFolder as $oFolder){
-        $aMessage = $oFolder->searchMessages([['SINCE', Carbon::parse($inboxset->inbox_settings_date)->format('d M y')], ['FROM', $inboxset->inbox_settings_sender]], 'UTF-8');
+        $checkInboxCount = Inbox::get()->isEmpty();
+        if ($checkInboxCount) {
+          $aMessage = $oFolder->searchMessages([['SINCE', Carbon::parse($inboxset->inbox_settings_date)->format('d M y')], ['FROM', $inboxset->inbox_settings_sender]], 'UTF-8');
+        } else {
+          $getLatestInboxDate = Inbox::orderBy('inbox_date', 'desc')->first();
+          $aMessage = $oFolder->searchMessages([['SINCE', Carbon::parse($getLatestInboxDate->inbox_date)->format('d M y')], ['FROM', $inboxset->inbox_settings_sender]], 'UTF-8');
+        }
         foreach($aMessage as $oMessage){
           if (!(Inbox::where('inbox_date', '=', $oMessage->date)->exists())) {
             $inbox= new Inbox();
@@ -105,7 +111,6 @@ class MailReceiverController extends Controller
       }
     }
   }
-
 
   //return view('admin.inbox');
   return redirect()->route(config('quickadmin.route').'.inbox.index');
